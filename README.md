@@ -1,0 +1,2 @@
+wellcomeplayer-dialogues-module
+===============================
