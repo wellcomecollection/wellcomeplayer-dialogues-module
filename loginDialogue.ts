@@ -61,7 +61,7 @@ export class LoginDialogue extends dialogue.Dialogue {
 
             this.$loginButton.removeClass('disabled');
 
-            this.$loginButton.click((e) => {
+            this.$loginButton.off('click').on('click', (e) => {
                 e.preventDefault();
 
                 this.login();

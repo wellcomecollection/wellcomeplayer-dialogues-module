@@ -64,23 +64,25 @@ export class RestrictedFileDialogue extends dialogue.Dialogue {
             </div>'
         );
 
-        this.$message = this.content.find(".message");
+        this.$message = this.$content.find(".message");
         this.$message.html(this.content.message);
 
-        this.$nextItemButton = this.content.find(".nextItem");
+        this.$nextItemButton = this.$content.find(".nextItem");
         this.$nextItemButton.text(this.content.nextItem);
 
-        this.$joinButton = this.content.find('a.join');
+        this.$joinButton = this.$content.find('a.join');
         this.$joinButton.text(this.content.joinLibrary);
         this.$joinButton.prop("href", this.options.joinLibraryUri);
 
         // initialise ui.
 
         // ui event handlers.
-        this.$nextItemButton.click(function (e) {
+        this.$nextItemButton.on('click', (e) => {
             e.preventDefault();
 
             $.publish(RestrictedFileDialogue.NEXT_ITEM, [this.requestedIndex]);
+
+            this.close();
         });
 
         // hide
