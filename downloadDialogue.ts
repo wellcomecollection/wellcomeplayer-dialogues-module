@@ -1,5 +1,5 @@
-import baseApp = require("../coreplayer-shared-module/baseApp");
-import app = require("../../extensions/wellcomeplayer-seadragon-extension/app");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import extension = require("../../extensions/wellcomeplayer-seadragon-extension/extension");
 import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../coreplayer-shared-module/dialogue");
@@ -13,6 +13,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
     $wholeImageHighResAsJpgButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
     $entireDocumentAsPdfButton: JQuery;
+    $entireFileAsOriginalButton: JQuery;
     $buttonsContainer: JQuery;
     $previewButton: JQuery;
     $downloadButton: JQuery;
@@ -61,6 +62,10 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
         this.$entireDocumentAsPdfButton.hide();
 
+        this.$entireFileAsOriginalButton = $('<li><a href="' + this.extension.getAssetByIndex(0).fileUri + '?download=true" target="_blank">' + String.prototype.format(this.content.entireFileAsOriginal, (this.provider.type == 'audio') ? 'mp3' : 'mp4') + '</a></li>');
+        this.$downloadOptions.append(this.$entireFileAsOriginalButton);
+        this.$entireFileAsOriginalButton.hide();
+
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
@@ -89,6 +94,12 @@ export class DownloadDialogue extends dialogue.Dialogue {
             this.$entireDocumentAsPdfButton.show();
         }
 
+        if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
+            this.$entireFileAsOriginalButton.show();
+            this.$downloadButton.hide();
+            this.$previewButton.hide();
+        }
+
         // select first option.
         this.$downloadOptions.find('input:first').prop("checked", true);
 
@@ -103,16 +114,16 @@ export class DownloadDialogue extends dialogue.Dialogue {
             switch (id){
                 case 'currentViewAsJpg':
                     //$.wellcome.player.trackAction("Files", "Previewed - Current View");
-                    window.open((<app.App>that.app).getCropUri(false));
+                    window.open((<extension.Extension>that.extension).getCropUri(false));
                 break;
                 case 'wholeImageHighResAsJpg':
                     //$.wellcome.player.trackAction("Files", "Previewed - Whole Image High Res");
-                    var asset = (<app.App>that.app).getCurrentAsset();
+                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
                     window.open((<provider.Provider>that.provider).getImage(asset, true));
                 break;
                 case 'wholeImageLowResAsJpg':
                     //$.wellcome.player.trackAction("Files", "Previewed - Whole Image Low Res");
-                    var asset = (<app.App>that.app).getCurrentAsset();
+                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
                     window.open((<provider.Provider>that.provider).getImage(asset, false));
                 break;
                 case 'entireDocumentAsPdf':
@@ -132,18 +143,18 @@ export class DownloadDialogue extends dialogue.Dialogue {
             switch (id){
                 case 'currentViewAsJpg':
                     //$.wellcome.player.trackAction("Files", "Downloaded - Current View");
-                    var asset = (<app.App>that.app).getCurrentAsset();
-                    var viewer = (<app.App>that.app).getViewer();
+                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
+                    var viewer = (<extension.Extension>that.extension).getViewer();
                     window.open((<provider.Provider>that.provider).getCrop(asset, viewer, true));
                 break;
                 case 'wholeImageHighResAsJpg':
                     //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image High Res");
-                    var asset = (<app.App>that.app).getCurrentAsset();
+                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
                     window.open((<provider.Provider>that.provider).getImage(asset, true, true));
                 break;
                 case 'wholeImageLowResAsJpg':
                     //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image Low Res");
-                    var asset = (<app.App>that.app).getCurrentAsset();
+                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
                     window.open((<provider.Provider>that.provider).getImage(asset, false, true));
                 break;
                 case 'entireDocumentAsPdf':
@@ -170,7 +181,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
     resize(): void {
 
         this.$element.css({
-            'top': this.app.height() - this.$element.outerHeight(true)
+            'top': this.extension.height() - this.$element.outerHeight(true)
         });
     }
 }

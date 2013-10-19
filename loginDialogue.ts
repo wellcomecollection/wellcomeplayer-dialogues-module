@@ -1,5 +1,5 @@
-import baseApp = require("../coreplayer-shared-module/baseApp");
-import app = require("../../extensions/wellcomeplayer-seadragon-extension/app");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import extension = require("../../extensions/wellcomeplayer-seadragon-extension/extension");
 import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../coreplayer-shared-module/dialogue");
@@ -182,37 +182,37 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$forgotButton.click((e) => {
             e.preventDefault();
 
-            this.app.redirect(this.options.forgotPasswordUri);
+            this.extension.redirect(this.options.forgotPasswordUri);
         });
 
         this.$registerButton.click((e) => {
             e.preventDefault();
 
-            this.app.redirect(this.options.registerUri);
+            this.extension.redirect(this.options.registerUri);
         });
 
         this.$signInWithTwitterButton.click((e) => {
             e.preventDefault();
 
-            this.app.redirect($(this).attr('href'));
+            this.extension.redirect($(this).attr('href'));
         });
 
         this.$signInWithFacebookButton.click((e) => {
             e.preventDefault();
 
-            this.app.redirect($(this).attr('href'));
+            this.extension.redirect($(this).attr('href'));
         });
 
         this.$signInWithGoogleButton.click((e) => {
             e.preventDefault();
 
-            this.app.redirect($(this).attr('href'));
+            this.extension.redirect($(this).attr('href'));
         });
 
         this.$signInWithOpenIDButton.click((e) => {
             e.preventDefault();
 
-            this.app.redirect($(this).attr('href'));
+            this.extension.redirect($(this).attr('href'));
         });
 
         // hide
