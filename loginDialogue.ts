@@ -215,6 +215,12 @@ export class LoginDialogue extends dialogue.Dialogue {
             this.extension.redirect($(this).attr('href'));
         });
 
+        this.returnFunc = () => {
+            if (this.isActive){
+                this.login();
+            }
+        }
+
         // hide
         this.$element.hide();
     }
