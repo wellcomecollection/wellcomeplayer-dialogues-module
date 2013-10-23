@@ -173,6 +173,8 @@ export class LoginDialogue extends dialogue.Dialogue {
         // initialise ui.
 
         // ui event handlers.
+        var that = this;
+
         this.$nextItemButton.click((e) => {
             e.preventDefault();
 
@@ -191,28 +193,28 @@ export class LoginDialogue extends dialogue.Dialogue {
             this.extension.redirect(this.options.registerUri);
         });
 
-        this.$signInWithTwitterButton.click((e) => {
+        this.$signInWithTwitterButton.click(function(e){
             e.preventDefault();
 
-            this.extension.redirect($(this).attr('href'));
+            that.extension.redirect($(this).attr('href'));
         });
 
-        this.$signInWithFacebookButton.click((e) => {
+        this.$signInWithFacebookButton.click(function(e){
             e.preventDefault();
 
-            this.extension.redirect($(this).attr('href'));
+            that.extension.redirect($(this).attr('href'));
         });
 
-        this.$signInWithGoogleButton.click((e) => {
+        this.$signInWithGoogleButton.click(function(e){
             e.preventDefault();
 
-            this.extension.redirect($(this).attr('href'));
+            that.extension.redirect($(this).attr('href'));
         });
 
-        this.$signInWithOpenIDButton.click((e) => {
+        this.$signInWithOpenIDButton.click(function(e){
             e.preventDefault();
 
-            this.extension.redirect($(this).attr('href'));
+            that.extension.redirect($(this).attr('href'));
         });
 
         this.returnFunc = () => {
