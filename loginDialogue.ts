@@ -3,6 +3,7 @@ import extension = require("../../extensions/wellcomeplayer-seadragon-extension/
 import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../coreplayer-shared-module/dialogue");
+import IWellcomeExtension = require("../wellcomeplayer-shared-module/iWellcomeExtension");
 
 export class LoginDialogue extends dialogue.Dialogue {
 
@@ -86,6 +87,8 @@ export class LoginDialogue extends dialogue.Dialogue {
             } else {
                 this.disableClose();
             }
+
+            (<IWellcomeExtension>this.extension).trackEvent('Interactions', 'Log in', 'Opened', '');
         });
 
         $.subscribe(LoginDialogue.HIDE_LOGIN_DIALOGUE, (e) => {
@@ -215,6 +218,10 @@ export class LoginDialogue extends dialogue.Dialogue {
             e.preventDefault();
 
             that.extension.redirect($(this).attr('href'));
+        });
+
+        this.$closeButton.on('click', () => {
+            (<IWellcomeExtension>this.extension).trackEvent('Interactions', 'Log in', 'Closed', '');
         });
 
         this.returnFunc = () => {
