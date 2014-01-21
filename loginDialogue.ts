@@ -69,7 +69,7 @@ export class LoginDialogue extends dialogue.Dialogue {
             });
 
             if (this.inadequatePermissions) {
-                if (this.provider.pkg.assets.length > 1) {
+                if (this.provider.assetSequence.assets.length > 1) {
                     this.$nextItemButton.show();
                 }
                 this.$socialLogins.hide();
