@@ -13,13 +13,14 @@ export class DownloadDialogue extends dialogue.Dialogue {
     $wholeImageHighResAsJpgButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
     $entireDocumentAsPdfButton: JQuery;
-    $entireFileAsOriginalButton: JQuery;
     $buttonsContainer: JQuery;
     $previewButton: JQuery;
     $downloadButton: JQuery;
 
     static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
     static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
+
+    isOpened: boolean = false;
 
     constructor($element: JQuery) {
         super($element);
@@ -33,6 +34,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
         $.subscribe(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
             this.open();
+            this.opened();
         });
 
         $.subscribe(DownloadDialogue.HIDE_DOWNLOAD_DIALOGUE, (e) => {
@@ -62,22 +64,83 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
         this.$entireDocumentAsPdfButton.hide();
 
-        var fileUri = this.extension.getAssetByIndex(0).fileUri;
-        var fileExtension = fileUri.split('.').pop();
-        this.$entireFileAsOriginalButton = $('<li><a href="' + fileUri + '?download=true" target="_blank">' + String.prototype.format(this.content.entireFileAsOriginal, fileExtension) + '</a></li>');
-        this.$downloadOptions.append(this.$entireFileAsOriginalButton);
-        this.$entireFileAsOriginalButton.hide();
-
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
-        this.$previewButton = $('<a class="button" href="#">Preview</a>');
+        this.$previewButton = $('<a class="button" href="#">' + this.content.preview + '</a>');
         this.$buttonsContainer.append(this.$previewButton);
 
-        this.$downloadButton = $('<a class="button" href="#">Download</a>');
+        this.$downloadButton = $('<a class="button" href="#">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
 
-        // initialise ui.
+        var that = this;
+
+        // ui event handlers.
+        this.$previewButton.on('click', () => {
+            var selectedOption = this.getSelectedOption();
+
+            var id = selectedOption.attr('id');
+            var asset = (<extension.Extension>that.extension).getCurrentAsset();
+
+            switch (id){
+                case 'currentViewAsJpg':
+                    //$.wellcome.player.trackAction("Files", "Previewed - Current View");
+                    window.open((<extension.Extension>that.extension).getCropUri(false));
+                break;
+                case 'wholeImageHighResAsJpg':
+                    //$.wellcome.player.trackAction("Files", "Previewed - Whole Image High Res");
+                    window.open((<provider.Provider>that.provider).getImage(asset, true));
+                break;
+                case 'wholeImageLowResAsJpg':
+                    //$.wellcome.player.trackAction("Files", "Previewed - Whole Image Low Res");
+                    window.open((<provider.Provider>that.provider).getImage(asset, false));
+                break;
+                case 'entireDocumentAsPdf':
+                    //$.wellcome.player.trackAction("Files", "Previewed - Entire Document As PDF");
+                    window.open((<provider.Provider>that.provider).getPDF());
+                break;
+            }
+
+            this.close();
+        });
+
+        this.$downloadButton.on('click', () => {
+            var selectedOption = that.getSelectedOption();
+
+            var id = selectedOption.attr('id');
+            var asset = (<extension.Extension>that.extension).getCurrentAsset();
+
+            switch (id){
+                case 'currentViewAsJpg':
+                    //$.wellcome.player.trackAction("Files", "Downloaded - Current View");
+                    var viewer = (<extension.Extension>that.extension).getViewer();
+                    window.open((<provider.Provider>that.provider).getCrop(asset, viewer, true));
+                break;
+                case 'wholeImageHighResAsJpg':
+                    //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image High Res");
+                    window.open((<provider.Provider>that.provider).getImage(asset, true, true));
+                break;
+                case 'wholeImageLowResAsJpg':
+                    //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image Low Res");
+                    window.open((<provider.Provider>that.provider).getImage(asset, false, true));
+                break;
+                case 'entireDocumentAsPdf':
+                    //$.wellcome.player.trackAction("Files", "Downloaded - Entire Document As PDF");
+                    window.open((<provider.Provider>that.provider).getPDF(true));
+                break;
+            }
+
+            this.close();
+        });
+
+        // hide
+        this.$element.hide();
+    }
+
+    opened() {
+        if (this.isOpened) return;
+
+        this.isOpened = true;
 
         // enable download based on license code.
         if (this.isDownloadOptionAvailable("currentViewAsJpg")) {
@@ -97,8 +160,21 @@ export class DownloadDialogue extends dialogue.Dialogue {
         }
 
         if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
+            var asset = this.extension.getCurrentAsset();
+
+            var fileExtension = this.getFileExtension(asset.fileUri);
+
             if (fileExtension !== 'jp2'){
-                this.$entireFileAsOriginalButton.show();
+
+                // if no sources are available, use original (mp3 or mp4)
+                if (!asset.sources){
+                    this.addEntireFileDownloadOption(asset.fileUri);
+                } else {
+                    for (var i = 0; i < asset.sources.length; i++){
+                        this.addEntireFileDownloadOption(asset.sources[i].src);
+                    }
+                }
+
                 this.$downloadButton.hide();
                 this.$previewButton.hide();
             }
@@ -107,71 +183,15 @@ export class DownloadDialogue extends dialogue.Dialogue {
         // select first option.
         this.$downloadOptions.find('input:first').prop("checked", true);
 
-        var that = this;
+        this.resize();
+    }
 
-        // ui event handlers.
-        this.$previewButton.on('click', () => {
-            var selectedOption = this.getSelectedOption();
+    addEntireFileDownloadOption(fileUri: string): void{
+        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank">' + String.prototype.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
+    }
 
-            var id = selectedOption.attr('id');
-
-            switch (id){
-                case 'currentViewAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Current View");
-                    window.open((<extension.Extension>that.extension).getCropUri(false));
-                break;
-                case 'wholeImageHighResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Whole Image High Res");
-                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
-                    window.open((<provider.Provider>that.provider).getImage(asset, true));
-                break;
-                case 'wholeImageLowResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Whole Image Low Res");
-                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
-                    window.open((<provider.Provider>that.provider).getImage(asset, false));
-                break;
-                case 'entireDocumentAsPdf':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Entire Document As PDF");
-                    window.open((<provider.Provider>that.provider).getPDF());
-                break;
-            }
-
-            this.close();
-        });
-
-        this.$downloadButton.on('click', () => {
-            var selectedOption = that.getSelectedOption();
-
-            var id = selectedOption.attr('id');
-
-            switch (id){
-                case 'currentViewAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Current View");
-                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
-                    var viewer = (<extension.Extension>that.extension).getViewer();
-                    window.open((<provider.Provider>that.provider).getCrop(asset, viewer, true));
-                break;
-                case 'wholeImageHighResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image High Res");
-                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
-                    window.open((<provider.Provider>that.provider).getImage(asset, true, true));
-                break;
-                case 'wholeImageLowResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image Low Res");
-                    var asset = (<extension.Extension>that.extension).getCurrentAsset();
-                    window.open((<provider.Provider>that.provider).getImage(asset, false, true));
-                break;
-                case 'entireDocumentAsPdf':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Entire Document As PDF");
-                    window.open((<provider.Provider>that.provider).getPDF(true));
-                break;
-            }
-
-            this.close();
-        });
-
-        // hide
-        this.$element.hide();
+    getFileExtension(fileUri: string): string{
+        return fileUri.split('.').pop();
     }
 
     getSelectedOption() {
