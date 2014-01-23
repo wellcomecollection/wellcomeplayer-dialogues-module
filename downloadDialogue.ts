@@ -26,9 +26,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
     }
 
     create(): void {
-        
+
         this.setConfig('downloadDialogue');
-        
+
         super.create();
 
         $.subscribe(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
@@ -62,7 +62,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
         this.$entireDocumentAsPdfButton.hide();
 
-        this.$entireFileAsOriginalButton = $('<li><a href="' + this.extension.getAssetByIndex(0).fileUri + '?download=true" target="_blank">' + String.prototype.format(this.content.entireFileAsOriginal, (this.provider.type == 'audio') ? 'mp3' : 'mp4') + '</a></li>');
+        var fileUri = this.extension.getAssetByIndex(0).fileUri;
+        var fileExtension = fileUri.split('.').pop();
+        this.$entireFileAsOriginalButton = $('<li><a href="' + fileUri + '?download=true" target="_blank">' + String.prototype.format(this.content.entireFileAsOriginal, fileExtension) + '</a></li>');
         this.$downloadOptions.append(this.$entireFileAsOriginalButton);
         this.$entireFileAsOriginalButton.hide();
 
@@ -95,9 +97,11 @@ export class DownloadDialogue extends dialogue.Dialogue {
         }
 
         if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
-            this.$entireFileAsOriginalButton.show();
-            this.$downloadButton.hide();
-            this.$previewButton.hide();
+            if (fileExtension !== 'jp2'){
+                this.$entireFileAsOriginalButton.show();
+                this.$downloadButton.hide();
+                this.$previewButton.hide();
+            }
         }
 
         // select first option.
