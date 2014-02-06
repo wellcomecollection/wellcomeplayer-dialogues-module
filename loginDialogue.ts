@@ -87,8 +87,6 @@ export class LoginDialogue extends dialogue.Dialogue {
             } else {
                 this.disableClose();
             }
-
-            (<IWellcomeExtension>this.extension).trackEvent('Player Interactions', 'Log in', 'Opened', '');
         });
 
         $.subscribe(LoginDialogue.HIDE_LOGIN_DIALOGUE, (e) => {
@@ -218,10 +216,6 @@ export class LoginDialogue extends dialogue.Dialogue {
             e.preventDefault();
 
             that.extension.redirect($(this).attr('href'));
-        });
-
-        this.$closeButton.on('click', () => {
-            (<IWellcomeExtension>this.extension).trackEvent('Player Interactions', 'Log in', 'Closed', '');
         });
 
         this.returnFunc = () => {
