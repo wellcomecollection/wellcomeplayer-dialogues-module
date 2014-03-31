@@ -19,6 +19,8 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
     static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
     static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
+    static DOWNLOAD: string = 'onDownload';
+    static PREVIEW: string = 'onPreview';
 
     isOpened: boolean = false;
 
@@ -84,20 +86,20 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
             switch (id){
                 case 'currentViewAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Current View");
                     window.open((<extension.Extension>that.extension).getCropUri(false));
+                    $.publish(DownloadDialogue.PREVIEW, ['currentViewAsJpg']);
                 break;
                 case 'wholeImageHighResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Whole Image High Res");
                     window.open((<provider.Provider>that.provider).getImage(asset, true));
+                    $.publish(DownloadDialogue.PREVIEW, ['wholeImageHighResAsJpg']);
                 break;
                 case 'wholeImageLowResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Whole Image Low Res");
                     window.open((<provider.Provider>that.provider).getImage(asset, false));
+                    $.publish(DownloadDialogue.PREVIEW, ['wholeImageLowResAsJpg']);
                 break;
                 case 'entireDocumentAsPdf':
-                    //$.wellcome.player.trackAction("Files", "Previewed - Entire Document As PDF");
                     window.open((<provider.Provider>that.provider).getPDF());
+                    $.publish(DownloadDialogue.PREVIEW, ['entireDocumentAsPdf']);
                 break;
             }
 
@@ -112,21 +114,21 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
             switch (id){
                 case 'currentViewAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Current View");
                     var viewer = (<extension.Extension>that.extension).getViewer();
                     window.open((<provider.Provider>that.provider).getCrop(asset, viewer, true));
+                    $.publish(DownloadDialogue.DOWNLOAD, ['currentViewAsJpg']);
                 break;
                 case 'wholeImageHighResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image High Res");
                     window.open((<provider.Provider>that.provider).getImage(asset, true, true));
+                    $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageHighResAsJpg']);
                 break;
                 case 'wholeImageLowResAsJpg':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Whole Image Low Res");
                     window.open((<provider.Provider>that.provider).getImage(asset, false, true));
+                    $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageLowResAsJpg']);
                 break;
                 case 'entireDocumentAsPdf':
-                    //$.wellcome.player.trackAction("Files", "Downloaded - Entire Document As PDF");
                     window.open((<provider.Provider>that.provider).getPDF(true));
+                    $.publish(DownloadDialogue.DOWNLOAD, ['entireDocumentAsPdf']);
                 break;
             }
 
