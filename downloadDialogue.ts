@@ -189,7 +189,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
     }
 
     addEntireFileDownloadOption(fileUri: string): void{
-        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank">' + String.prototype.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
+        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.prototype.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
     }
 
     getFileExtension(fileUri: string): string{
