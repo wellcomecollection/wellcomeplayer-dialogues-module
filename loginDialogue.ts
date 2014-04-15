@@ -10,19 +10,22 @@ export class LoginDialogue extends dialogue.Dialogue {
     $message: JQuery;
     $title: JQuery;
     $nextItemButton: JQuery;
-    $usernameLabel: JQuery;
-    $username: JQuery;
-    $passwordLabel: JQuery;
-    $password: JQuery;
-    $forgotButton: JQuery;
-    $registerButton: JQuery;
-    $loginButton: JQuery;
-    $socialLogins: JQuery;
-    $socialLoginsTitle: JQuery;
-    $signInWithTwitterButton: JQuery;
-    $signInWithFacebookButton: JQuery;
-    $signInWithGoogleButton: JQuery;
-    $signInWithOpenIDButton: JQuery;
+    //$usernameLabel: JQuery;
+    //$username: JQuery;
+    //$passwordLabel: JQuery;
+    //$password: JQuery;
+    //$forgotButton: JQuery;
+    //$registerButton: JQuery;
+    //$loginButton: JQuery;
+    $viewTermsButton: JQuery;
+    $acceptTermsButton: JQuery;
+    //$socialLogins: JQuery;
+    //$socialLoginsTitle: JQuery;
+    //$signInWithLibraryAccountButton: JQuery;
+    //$signInWithTwitterButton: JQuery;
+    //$signInWithFacebookButton: JQuery;
+    //$signInWithGoogleButton: JQuery;
+    //$signInWithOpenIDButton: JQuery;
 
     successCallback: any;
     failureCallback: any;
@@ -58,21 +61,23 @@ export class LoginDialogue extends dialogue.Dialogue {
             // reset ui.
             this.$message.hide();
             this.$nextItemButton.hide();
-            this.$socialLogins.show();
+            //this.$socialLogins.show();
 
-            this.$loginButton.removeClass('disabled');
+            //this.$loginButton.removeClass('disabled');
 
+            /*
             this.$loginButton.off('click').on('click', (e) => {
                 e.preventDefault();
 
                 this.login();
             });
+            */
 
             if (this.inadequatePermissions) {
                 if (this.provider.assetSequence.assets.length > 1) {
                     this.$nextItemButton.show();
                 }
-                this.$socialLogins.hide();
+                //this.$socialLogins.hide();
             }
 
             if (this.message) {
@@ -87,6 +92,10 @@ export class LoginDialogue extends dialogue.Dialogue {
             } else {
                 this.disableClose();
             }
+
+            // this has to be set here, as on click is too late to add querystring params.
+            this.$acceptTermsButton.attr('href', this.options.acceptTermsUri + '?redirectUrl=' + escape(parent.document.URL));
+            //this.$signInWithLibraryAccountButton.attr('href', '/handlers/auth/CasSSO.ashx?redirectUrl=' + escape(parent.document.URL));
         });
 
         $.subscribe(LoginDialogue.HIDE_LOGIN_DIALOGUE, (e) => {
@@ -98,6 +107,7 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$title = $('<h1>' + this.content.title + '</h1>');
         this.$content.append(this.$title);
 
+        /*
         this.$content.append('\
             <div class="main-login">\
                 <p class="message"></p>\
@@ -118,10 +128,21 @@ export class LoginDialogue extends dialogue.Dialogue {
             </div>\
             <div class="social-logins">\
                 <h6></h6>\
+                <a class="social-login openid library" href="/handlers/auth/CasSSO.ashx">Library account</a>\
                 <a class="social-login twitter" href="/handlers/auth/Twitter.ashx">Twitter</a>\
                 <a class="social-login facebook" href="/handlers/auth/Facebook.ashx">Facebook</a>\
                 <a class="social-login google" href="/handlers/auth/Google.ashx">Google</a>\
                 <a class="social-login openid" href="/login-openid/">OpenID</a>\
+            </div>'
+        );
+        */
+
+        this.$content.append('\
+            <div class="main-login">\
+                <p class="message"></p>\
+                <a class="nextItem" href="#"></a>\
+                <a class="viewTerms" href="#"></a>\
+                <a class="acceptTerms button" href="#" target="_parent"></a>\
             </div>'
         );
 
@@ -130,6 +151,13 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$nextItemButton = this.$content.find(".nextItem");
         this.$nextItemButton.text(this.content.nextItem);
 
+        this.$viewTermsButton = this.$content.find(".viewTerms");
+        this.$viewTermsButton.text(this.content.viewTerms);
+
+        this.$acceptTermsButton = this.$content.find(".acceptTerms");
+        this.$acceptTermsButton.text(this.content.acceptTerms);
+
+        /*
         this.$usernameLabel = this.$content.find("label[for='username']");
         this.$usernameLabel.text(this.content.usernameLabel);
 
@@ -142,6 +170,10 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$password = this.$content.find('#password');
         this.$password.attr('tabindex', 2);
 
+        this.$loginButton = this.$content.find('a.login');
+        this.$loginButton.text(this.content.login);
+        this.$loginButton.attr('tabindex', 3);
+
         this.$forgotButton = this.$content.find('a.forgot');
         this.$forgotButton.text(this.content.forgotPassword);
         this.$forgotButton.attr('tabindex', 4);
@@ -150,27 +182,26 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$registerButton.text(this.content.register);
         this.$registerButton.attr('tabindex', 5);
 
-        this.$loginButton = this.$content.find('a.login');
-        this.$loginButton.text(this.content.login);
-        this.$loginButton.attr('tabindex', 3);
-
         this.$socialLogins = this.$content.find('.social-logins');
 
         this.$socialLoginsTitle = this.$content.find('.social-logins h6');
-        this.$socialLoginsTitle.text(this.content.orLoginWith);
+        this.$socialLoginsTitle.text(this.content.loginWith);
+
+        this.$signInWithLibraryAccountButton = this.$content.find('a.library');
+        this.$signInWithLibraryAccountButton.attr('tabindex', 6);
 
         this.$signInWithTwitterButton = this.$content.find('a.twitter');
-        this.$signInWithTwitterButton.attr('tabindex', 6);
+        this.$signInWithTwitterButton.attr('tabindex', 7);
 
         this.$signInWithFacebookButton = this.$content.find('a.facebook');
-        this.$signInWithFacebookButton.attr('tabindex', 7);
+        this.$signInWithFacebookButton.attr('tabindex', 8);
 
         this.$signInWithGoogleButton = this.$content.find('a.google');
-        this.$signInWithGoogleButton.attr('tabindex', 8);
+        this.$signInWithGoogleButton.attr('tabindex', 9);
 
         this.$signInWithOpenIDButton = this.$content.find('a.openid');
-        this.$signInWithOpenIDButton.attr('tabindex', 9);
-
+        this.$signInWithOpenIDButton.attr('tabindex', 10);
+        */
         // initialise ui.
 
         // ui event handlers.
@@ -182,6 +213,13 @@ export class LoginDialogue extends dialogue.Dialogue {
             $.publish(LoginDialogue.NEXT_ITEM, [this.requestedIndex]);
         });
 
+        this.$viewTermsButton.click((e) => {
+            e.preventDefault();
+
+            window.open(this.options.termsUri);
+        });
+
+        /*
         this.$forgotButton.click((e) => {
             e.preventDefault();
 
@@ -192,6 +230,17 @@ export class LoginDialogue extends dialogue.Dialogue {
             e.preventDefault();
 
             this.extension.redirect(this.options.registerUri);
+        });
+
+        this.$signInWithLibraryAccountButton.click(function(e){
+            e.preventDefault();
+
+            var path = 'http://local.wellcomelibrary.org' + $(this).attr('href') + '?redirectUrl=' + escape(parent.document.URL);
+
+            that.extension.redirect(path);
+            window.parent.document.location.href = path;
+
+            that.extension.redirect("/handlers/auth/CasSSO.ashx?redirectUrl=http://local.wellcomelibrary.org/player/b20047459");
         });
 
         this.$signInWithTwitterButton.click(function(e){
@@ -223,11 +272,12 @@ export class LoginDialogue extends dialogue.Dialogue {
                 this.login();
             }
         }
-
+        */
         // hide
         this.$element.hide();
     }
 
+    /*
     login(): void {
 
         this.$loginButton.unbind('click');
@@ -245,6 +295,7 @@ export class LoginDialogue extends dialogue.Dialogue {
             }
         ]);
     }
+    */
 
     resize(): void {
         super.resize();
