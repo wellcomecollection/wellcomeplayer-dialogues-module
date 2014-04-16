@@ -16,7 +16,7 @@ export class LoginDialogue extends dialogue.Dialogue {
     //$password: JQuery;
     //$forgotButton: JQuery;
     //$registerButton: JQuery;
-    //$loginButton: JQuery;
+    $loginButton: JQuery;
     $viewTermsButton: JQuery;
     $acceptTermsButton: JQuery;
     //$socialLogins: JQuery;
@@ -26,12 +26,15 @@ export class LoginDialogue extends dialogue.Dialogue {
     //$signInWithFacebookButton: JQuery;
     //$signInWithGoogleButton: JQuery;
     //$signInWithOpenIDButton: JQuery;
+    $guestLogin: JQuery;
+    $libraryLogin: JQuery;
 
     successCallback: any;
     failureCallback: any;
     inadequatePermissions: boolean;
     requestedIndex: number;
     allowClose: boolean;
+    allowGuestLogin: boolean;
     message: string;
 
     static SHOW_LOGIN_DIALOGUE: string = 'onShowLoginDialogue';
@@ -56,10 +59,13 @@ export class LoginDialogue extends dialogue.Dialogue {
             this.inadequatePermissions = params.inadequatePermissions || false;
             this.requestedIndex = params.requestedIndex;
             this.allowClose = params.allowClose;
+            this.allowGuestLogin = params.allowGuestLogin;
             this.message = params.message;
 
             // reset ui.
             this.$message.hide();
+            //this.$guestLogin.hide();
+            this.$libraryLogin.hide();
             this.$nextItemButton.hide();
             //this.$socialLogins.show();
 
@@ -77,7 +83,12 @@ export class LoginDialogue extends dialogue.Dialogue {
                 if (this.provider.assetSequence.assets.length > 1) {
                     this.$nextItemButton.show();
                 }
-                //this.$socialLogins.hide();
+                this.$libraryLogin.show();
+            }
+
+            if (!this.allowGuestLogin){
+                this.$guestLogin.hide();
+                this.$libraryLogin.show();
             }
 
             if (this.message) {
@@ -95,7 +106,7 @@ export class LoginDialogue extends dialogue.Dialogue {
 
             // this has to be set here, as on click is too late to add querystring params.
             this.$acceptTermsButton.attr('href', this.options.acceptTermsUri + '?redirectUrl=' + escape(parent.document.URL));
-            //this.$signInWithLibraryAccountButton.attr('href', '/handlers/auth/CasSSO.ashx?redirectUrl=' + escape(parent.document.URL));
+            this.$loginButton.attr('href', '/handlers/auth/CasSSO.ashx?redirectUrl=' + escape(parent.document.URL));
         });
 
         $.subscribe(LoginDialogue.HIDE_LOGIN_DIALOGUE, (e) => {
@@ -141,12 +152,20 @@ export class LoginDialogue extends dialogue.Dialogue {
             <div class="main-login">\
                 <p class="message"></p>\
                 <a class="nextItem" href="#"></a>\
-                <a class="viewTerms" href="#"></a>\
-                <a class="acceptTerms button" href="#" target="_parent"></a>\
+                <div class="guestLogin">\
+                    <a class="viewTerms" href="#"></a>\
+                    <a class="acceptTerms button" href="#" target="_parent"></a>\
+                </div>\
+                <div class="libraryLogin">\
+                    <a class="login button" href="#" target="_parent"></a>\
+                </div>\
             </div>'
         );
 
         this.$message = this.$content.find(".message");
+
+        this.$guestLogin = this.$content.find(".guestLogin");
+        this.$libraryLogin = this.$content.find(".libraryLogin");
 
         this.$nextItemButton = this.$content.find(".nextItem");
         this.$nextItemButton.text(this.content.nextItem);
@@ -156,6 +175,9 @@ export class LoginDialogue extends dialogue.Dialogue {
 
         this.$acceptTermsButton = this.$content.find(".acceptTerms");
         this.$acceptTermsButton.text(this.content.acceptTerms);
+
+        this.$loginButton = this.$content.find('a.login');
+        this.$loginButton.text(this.content.login);
 
         /*
         this.$usernameLabel = this.$content.find("label[for='username']");
