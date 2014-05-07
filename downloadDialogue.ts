@@ -82,7 +82,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
             var selectedOption = this.getSelectedOption();
 
             var id = selectedOption.attr('id');
-            var asset = (<extension.Extension>that.extension).getCurrentAsset();
+            var asset = this.provider.getCurrentCanvas();
 
             switch (id){
                 case 'currentViewAsJpg':
@@ -110,7 +110,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
             var selectedOption = that.getSelectedOption();
 
             var id = selectedOption.attr('id');
-            var asset = (<extension.Extension>that.extension).getCurrentAsset();
+            var asset = this.provider.getCurrentCanvas();
 
             switch (id){
                 case 'currentViewAsJpg':
@@ -162,7 +162,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
         }
 
         if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
-            var asset = this.extension.getCurrentAsset();
+            var asset = this.provider.getCurrentCanvas();
 
             var fileExtension = this.getFileExtension(asset.fileUri);
 
@@ -201,7 +201,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
     }
 
     isDownloadOptionAvailable(option): boolean {
-        return this.provider.assetSequence.extensions.permittedOperations.contains(option);
+        return this.provider.sequence.extensions.permittedOperations.contains(option);
     }
 
     resize(): void {
