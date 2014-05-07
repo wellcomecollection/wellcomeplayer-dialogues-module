@@ -36,7 +36,7 @@ export class RestrictedFileDialogue extends dialogue.Dialogue {
             // reset ui.
             this.$nextItemButton.hide();
 
-            if (this.provider.assetSequence.assets.length > 1) {
+            if (this.provider.getTotalCanvases() > 1) {
                 this.$nextItemButton.show();
             }
 

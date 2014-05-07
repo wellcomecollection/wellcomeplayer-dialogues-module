@@ -18,9 +18,9 @@ export class ConditionsDialogue extends dialogue.Dialogue {
     }
 
     create(): void {
-        
+
         this.setConfig('conditionsDialogue');
-        
+
         super.create();
 
         $.subscribe(ConditionsDialogue.SHOW_CONDITIONS_DIALOGUE, (e, params) => {
@@ -42,8 +42,8 @@ export class ConditionsDialogue extends dialogue.Dialogue {
 
         // initialise ui.
         this.$title.text(this.content.title);
-        
-        var licenseCode = this.provider.getRootSection().extensions.mods.dzLicenseCode;
+
+        var licenseCode = this.provider.getRootStructure().extensions.mods.dzLicenseCode;
 
         var licenseText = this.content[licenseCode] || this.content["A"];
 
