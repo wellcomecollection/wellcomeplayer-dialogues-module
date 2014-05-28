@@ -49,7 +49,14 @@
 }
 
 #app .overlay.login .message {
-	margin-bottom: 10px !important;
+	margin: 10px 0 10px 0 !important;
+	padding: 10px 10px 10px 0 !important;
+	height: 120px;
+	overflow: auto;
+
+	&.loading{
+		.loading(@loaderWhiteBg);
+	}
 }
 
 #app .overlay.login a.acceptTerms {

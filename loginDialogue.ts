@@ -15,6 +15,7 @@ export class LoginDialogue extends dialogue.Dialogue {
     message: string;
     requestedIndex: number;
     successCallback: any;
+    title: string;
 
     $acceptTermsButton: JQuery;
     $facebookLoginButton: JQuery;
@@ -58,6 +59,7 @@ export class LoginDialogue extends dialogue.Dialogue {
             that.message = params.message;
             that.requestedIndex = params.requestedIndex;
             that.successCallback = params.successCallback;
+            that.title = params.title;
 
             // reset ui.
             that.$message.hide();
@@ -81,6 +83,12 @@ export class LoginDialogue extends dialogue.Dialogue {
 
             if (that.allowSocialLogin){
                 that.$socialLogin.show();
+            }
+
+            if (that.title){
+                that.setTitle(that.title);
+            } else {
+                that.setTitle(that.content.title);
             }
 
             if (that.message) {
@@ -113,7 +121,7 @@ export class LoginDialogue extends dialogue.Dialogue {
 
         // create ui.
 
-        this.$title = $('<h1>' + this.content.title + '</h1>');
+        this.$title = $('<h1></h1>');
         this.$content.append(this.$title);
 
         this.$content.append('\
@@ -187,7 +195,12 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$viewTermsButton.click((e) => {
             e.preventDefault();
 
-            window.open(this.options.termsUri);
+            this.$message.empty();
+            this.$message.addClass('loading');
+            this.$message.load(this.options.termsUri, () => {
+                this.$message.removeClass('loading');
+                this.$message.find('a').prop('target', '_blank');
+            });
         });
 
         this.$libraryLoginButton.click(function(e){
@@ -228,8 +241,12 @@ export class LoginDialogue extends dialogue.Dialogue {
         super.resize();
     }
 
+    setTitle(title: string): void{
+        this.$title.html(title);
+    }
+
     showMessage(message): void {
-        this.$message.text(message);
+        this.$message.html(message);
         this.$message.show();
     }
 }
