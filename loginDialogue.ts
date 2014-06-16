@@ -9,7 +9,7 @@ export class LoginDialogue extends dialogue.Dialogue {
 
     allowClose: boolean;
     allowGuestLogin: boolean;
-    allowSocialLogin: boolean;
+    //allowSocialLogin: boolean;
     failureCallback: any;
     inadequatePermissions: boolean;
     message: string;
@@ -26,8 +26,7 @@ export class LoginDialogue extends dialogue.Dialogue {
     $message: JQuery;
     $nextItemButton: JQuery;
     $openIDLoginButton: JQuery;
-    $socialLogin: JQuery;
-    //$socialLoginsTitle: JQuery;
+    //$socialLogin: JQuery;
     $title: JQuery;
     $twitterLoginButton: JQuery;
     $viewTermsButton: JQuery;
@@ -53,7 +52,7 @@ export class LoginDialogue extends dialogue.Dialogue {
             that.open();
             that.allowClose = params.allowClose;
             that.allowGuestLogin = params.allowGuestLogin || false;
-            that.allowSocialLogin = params.allowSocialLogin || false;
+            //that.allowSocialLogin = params.allowSocialLogin || false;
             that.failureCallback = params.failureCallback;
             that.inadequatePermissions = params.inadequatePermissions || false;
             that.message = params.message;
@@ -66,7 +65,7 @@ export class LoginDialogue extends dialogue.Dialogue {
             that.$nextItemButton.hide();
             that.$guestLogin.hide();
             that.$libraryLogin.hide();
-            that.$socialLogin.hide();
+            //that.$socialLogin.hide();
 
             if (that.inadequatePermissions) {
                 if (that.provider.getTotalCanvases() > 1) {
@@ -77,13 +76,15 @@ export class LoginDialogue extends dialogue.Dialogue {
 
             if (that.allowGuestLogin){
                 that.$guestLogin.show();
+                that.$message.addClass('guest');
             } else {
                 that.$libraryLogin.show();
+                that.$message.removeClass('guest');
             }
 
-            if (that.allowSocialLogin){
-                that.$socialLogin.show();
-            }
+            //if (that.allowSocialLogin){
+            //    that.$socialLogin.show();
+            //}
 
             if (that.title){
                 that.setTitle(that.title);
@@ -133,22 +134,21 @@ export class LoginDialogue extends dialogue.Dialogue {
                     <a class="acceptTerms button" href="#" target="_parent"></a>\
                 </div>\
                 <div class="libraryLogin">\
-                    <a class="button" href="/handlers/auth/CasSSO.ashx"></a>\
-                </div>\
-                <div class="socialLogin">\
+                    <a class="library" href="/handlers/auth/CasSSO.ashx"></a>\
                     <a class="twitter" href="/handlers/auth/Twitter.ashx">Twitter</a>\
                     <a class="facebook" href="/handlers/auth/Facebook.ashx">Facebook</a>\
                     <a class="google" href="/handlers/auth/Google.ashx">Google</a>\
-                    <a class="openid" href="/login-openid/">OpenID</a>\
                 </div>\
             </div>'
         );
+
+        //<a class="openid" href="/login-openid/">OpenID</a>\
 
         this.$message = this.$content.find(".message");
 
         this.$guestLogin = this.$content.find(".guestLogin");
         this.$libraryLogin = this.$content.find(".libraryLogin");
-        this.$socialLogin = this.$content.find(".socialLogin");
+        //this.$socialLogin = this.$content.find(".socialLogin");
 
         this.$nextItemButton = this.$content.find(".nextItem");
         this.$nextItemButton.text(this.content.nextItem);
@@ -159,25 +159,25 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$acceptTermsButton = this.$guestLogin.find(".acceptTerms");
         this.$acceptTermsButton.text(this.content.acceptTerms);
 
-        this.$libraryLoginButton = this.$libraryLogin.find('.button');
+        this.$libraryLoginButton = this.$libraryLogin.find('.library');
         this.$libraryLoginButton.text(this.content.login);
 
         //this.$socialLoginsTitle = this.$socialLogin.find('h6');
         //this.$socialLoginsTitle.text(this.content.socialLoginsTitle);
 
-        this.$twitterLoginButton = this.$socialLogin.find('a.twitter');
+        this.$twitterLoginButton = this.$libraryLogin.find('a.twitter');
         this.$twitterLoginButton.text(this.content.twitter);
         this.$twitterLoginButton.attr('tabindex', 7);
 
-        this.$facebookLoginButton = this.$socialLogin.find('a.facebook');
+        this.$facebookLoginButton = this.$libraryLogin.find('a.facebook');
         this.$facebookLoginButton.text(this.content.facebook);
         this.$facebookLoginButton.attr('tabindex', 8);
 
-        this.$googleLoginButton = this.$socialLogin.find('a.google');
+        this.$googleLoginButton = this.$libraryLogin.find('a.google');
         this.$googleLoginButton.text(this.content.google);
         this.$googleLoginButton.attr('tabindex', 9);
 
-        this.$openIDLoginButton = this.$socialLogin.find('a.openid');
+        this.$openIDLoginButton = this.$libraryLogin.find('a.openid');
         this.$openIDLoginButton.text(this.content.openid);
         this.$openIDLoginButton.attr('tabindex', 10);
 
