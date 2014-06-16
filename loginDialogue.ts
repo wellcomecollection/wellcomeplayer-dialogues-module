@@ -160,7 +160,7 @@ export class LoginDialogue extends dialogue.Dialogue {
         this.$acceptTermsButton.text(this.content.acceptTerms);
 
         this.$libraryLoginButton = this.$libraryLogin.find('.library');
-        this.$libraryLoginButton.text(this.content.login);
+        this.$libraryLoginButton.text(this.content.signInWithLibraryAccount);
 
         //this.$socialLoginsTitle = this.$socialLogin.find('h6');
         //this.$socialLoginsTitle.text(this.content.socialLoginsTitle);
