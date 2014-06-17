@@ -166,19 +166,19 @@ export class LoginDialogue extends dialogue.Dialogue {
         //this.$socialLoginsTitle.text(this.content.socialLoginsTitle);
 
         this.$twitterLoginButton = this.$libraryLogin.find('a.twitter');
-        this.$twitterLoginButton.text(this.content.twitter);
+        this.$twitterLoginButton.text(this.content.signInWithTwitter);
         this.$twitterLoginButton.attr('tabindex', 7);
 
         this.$facebookLoginButton = this.$libraryLogin.find('a.facebook');
-        this.$facebookLoginButton.text(this.content.facebook);
+        this.$facebookLoginButton.text(this.content.signInWithFacebook);
         this.$facebookLoginButton.attr('tabindex', 8);
 
         this.$googleLoginButton = this.$libraryLogin.find('a.google');
-        this.$googleLoginButton.text(this.content.google);
+        this.$googleLoginButton.text(this.content.signInWithGoogle);
         this.$googleLoginButton.attr('tabindex', 9);
 
         this.$openIDLoginButton = this.$libraryLogin.find('a.openid');
-        this.$openIDLoginButton.text(this.content.openid);
+        this.$openIDLoginButton.text(this.content.signInWithOpenID);
         this.$openIDLoginButton.attr('tabindex', 10);
 
         // initialise ui.
