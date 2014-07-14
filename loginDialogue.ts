@@ -114,6 +114,8 @@ export class LoginDialogue extends dialogue.Dialogue {
             //that.$twitterLoginButton.attr('href', '/handlers/auth/Twitter.ashx?redirectUrl=' + uri);
             //that.$openIDLoginButton.attr('href', '/login-openid/?redirectUrl=' + uri);
             //that.$googleLoginButton.attr('href', '/handlers/auth/Google.ashx?redirectUrl=' + uri);
+
+            this.resize();
         });
 
         $.subscribe(LoginDialogue.HIDE_LOGIN_DIALOGUE, (e) => {
