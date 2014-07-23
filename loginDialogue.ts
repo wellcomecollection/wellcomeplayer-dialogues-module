@@ -33,7 +33,10 @@ export class LoginDialogue extends dialogue.Dialogue {
 
     static SHOW_LOGIN_DIALOGUE: string = 'onShowLoginDialogue';
     static HIDE_LOGIN_DIALOGUE: string = 'onHideLoginDialogue';
-    static NEXT_ITEM: string = 'onNextItem';
+    static VIEW_TERMS: string = 'login.onViewTerms';
+    static VIEW_FULL_TERMS: string = 'login.onViewFullTerms';
+    static ACCEPT_TERMS: string = 'login.onAcceptTerms';
+    static NEXT_ITEM: string = 'login.onNextItem';
     static LOGIN: string = 'onLogin';
 
     constructor($element: JQuery) {
@@ -77,6 +80,7 @@ export class LoginDialogue extends dialogue.Dialogue {
             if (that.allowGuestLogin){
                 that.$guestLogin.show();
                 that.$message.addClass('guest');
+                $.publish(LoginDialogue.VIEW_TERMS);
             } else {
                 that.$libraryLogin.show();
                 that.$message.removeClass('guest');
@@ -194,6 +198,10 @@ export class LoginDialogue extends dialogue.Dialogue {
             $.publish(LoginDialogue.NEXT_ITEM, [this.requestedIndex]);
         });
 
+        this.$acceptTermsButton.click((e) => {
+            $.publish(LoginDialogue.ACCEPT_TERMS);
+        });
+
         this.$viewTermsButton.click((e) => {
             e.preventDefault();
 
@@ -204,6 +212,8 @@ export class LoginDialogue extends dialogue.Dialogue {
                 this.$message.find('a').prop('target', '_blank');
                 this.$viewTermsButton.hide();
             });
+
+            $.publish(LoginDialogue.VIEW_FULL_TERMS);
         });
 
         this.$libraryLoginButton.click(function(e){
