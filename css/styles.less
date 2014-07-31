@@ -1,133 +1,145 @@
 
-#app .overlay.login{
-    width: 468px;
-}
+#app{
 
-#app .overlay.login a.login{
-    float: right;
-    margin: 10px 0 0 0;
-}
+    @img-path: '../../../modules/wellcomeplayer-shared-module/img/';
 
-#app .overlay.login .bottom{
-    background: none;
-}
+    .overlay{
 
-#app .overlay.restrictedFile{
-    width: 468px;
-}
+        &.login{
 
-#app .overlay.restrictedFile a{
-    margin: 10px 15px 0 0;
-}
+            width: 468px;
 
-#app .overlay.restrictedFile .bottom{
-    background: none;
-}
+            a.login{
+                float: right;
+                margin: @margin-medium-vertical 0 0 0;
+            }
 
-#app .main-login label {
-	display: block;
-	float: none;
-	font-weight: bold;
-	font-size: 1.3333em;
-	text-align: left;
-	padding: 10px 0 5px 0;
-}
+            .bottom{
+                background: none;
+            }
 
-#app .main-login-buttons {
-	overflow: hidden;
-	margin: 0 0 10px 0;
-}
+            .message {
+                margin: @margin-medium-vertical 0 0 0 !important;
+                padding: @padding-medium-vertical @padding-medium-horizontal @padding-medium-vertical 0 !important;
+                overflow: auto;
 
-#app .main-login-buttons .forgot {
-	float: left;
-	margin: 10px 0 0 0;
-}
+                &.loading{
+                    .loading(@loader-white-bg);
+                }
 
-#app .main-login-buttons .register {
-	float: left;
-	margin: 10px 0 0 20px;
-}
+                &.guest{
+                    height: 120px;
+                    margin-bottom: @margin-medium-vertical !important;
+                }
 
-#app .overlay.login .message {
-	margin: 10px 0 0 0 !important;
-	padding: 10px 10px 10px 0 !important;
-	overflow: auto;
+                ul{
+                    list-style: square outside url('@{img-path}bullet.png');
+                    padding-left: 1em;
+                    margin: 1em 0;
 
-	&.loading{
-		.loading(@loaderWhiteBg);
-	}
+                    li{
+                        padding-bottom: 0.5em;
+                    }
+                }
+            }
 
-	&.guest{
-		height: 120px;
-		margin-bottom: 10px !important;
-	}
+            a.acceptTerms {
+                float: right;
+            }
 
-	ul{
-		list-style: square outside url('../../../modules/wellcomeplayer-shared-module/img/bullet.png');
-		padding-left: 1em;
-		margin: 1em 0;
+            a.login {
+                float: right;
+                margin: @margin-medium-vertical 0 0 0;
+            }
 
-		li{
-			padding-bottom: 0.5em;
-		}
-	}
-}
+            .libraryLogin {
+                background: @overlay-group-bg;
+                margin: 0;
+                padding: @padding-medium;
+                overflow: hidden;
 
-#app .overlay.login a.acceptTerms {
-	float: right;
-}
+                h6 {
+                    margin: 0;
+                    padding: 0 0 10px 0;
+                    font-size: 1.3333em;
+                }
 
-#app .overlay.login a.login {
-	float: right;
-	margin: 10px 0 0 0;
-}
+                a {
+                    display: block;
+                    background: #FFF url('@{theme-img-path}sprite.png') 0 -3100px no-repeat;
+                    background-image: url('@{theme-img-path}sprite.png'), -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 100%);
+                    border: 1px solid @gray-light;
+                    font-size: 12px;
+                    margin: 0 4px 10px 0;
+                    padding: 5px 10px 5px 30px;
+                    color: @gray-dark;
+                    font-weight: normal;
+                    -webkit-border-radius: 3px;
+                    -moz-border-radius: 3px;
+                    -ms-border-radius: 3px;
+                    -o-border-radius: 3px;
+                    border-radius: 3px;
 
-#app .overlay.login .libraryLogin {
-	background: #F5F5F5;
-	margin: 0;
-	padding: 10px;
-	overflow: hidden;
+                    &.library {
+                        background-position: -3px -4035px, 0 0;
+                    }
 
-	h6 {
-		margin: 0;
-		padding: 0 0 10px 0;
-		font-size: 1.3333em;
-	}
+                    &.twitter {
+                        background-position: -3px -3102px, 0 0;
+                    }
 
-	a{
-		display: block;
-		background: #FFF url('../../../modules/coreplayer-shared-module/img/sprite.png') 0 -3100px no-repeat;
-		background-image: url('../../../modules/coreplayer-shared-module/img/sprite.png'), -webkit-linear-gradient(top, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
-		border: 1px solid #CCC;
-		font-size: 12px;
-		margin: 0 4px 10px 0;
-		padding: 5px 10px 5px 30px;
-		color: #211F1F;
-		font-weight: normal;
-		-webkit-border-radius: 3px;
-		-moz-border-radius: 3px;
-		-ms-border-radius: 3px;
-		-o-border-radius: 3px;
-		border-radius: 3px;
+                    &.facebook {
+                        background-position: -3px -3152px, 0 0;
+                    }
 
-		&.library {
-			background-position: -3px -4035px, 0 0;
-		}
+                    &.google {
+                        background-position: -3px -3252px, 0 0;
+                    }
 
-		&.twitter {
-			background-position: -3px -3102px, 0 0;
-		}
+                    &.openid {
+                        background-position: -3px -3202px, 0 0;
+                    }
+                }
+            }
+        }
 
-		&.facebook {
-			background-position: -3px -3152px, 0 0;
-		}
+        &.restrictedFile{
+            width: 468px;
 
-		&.google {
-			background-position: -3px -3252px, 0 0;
-		}
+            a{
+                margin: @margin-medium-vertical @margin-large-horizontal 0 0;
+            }
 
-		&.openid {
-			background-position: -3px -3202px, 0 0;
-		}
-	}
+            .bottom{
+                background: none;
+            }
+        }
+    }
+
+    .main-login{
+
+        label {
+            display: block;
+            float: none;
+            font-weight: bold;
+            font-size: 1.3333em;
+            text-align: left;
+            padding: @padding-medium-vertical 0 @padding-small-vertical 0;
+        }
+    }
+
+    .main-login-buttons {
+        overflow: hidden;
+        margin: 0 0 @margin-medium-vertical 0;
+
+        .forgot {
+            float: left;
+            margin: @margin-medium-vertical 0 0 0;
+        }
+
+        .register {
+            float: left;
+            margin: @margin-medium-vertical 0 0 (@margin-medium-vertical * 2);
+        }
+    }
 }
