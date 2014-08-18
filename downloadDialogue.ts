@@ -69,10 +69,10 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
-        this.$previewButton = $('<a class="button" href="#">' + this.content.preview + '</a>');
+        this.$previewButton = $('<a class="btn btn-primary" href="#">' + this.content.preview + '</a>');
         this.$buttonsContainer.append(this.$previewButton);
 
-        this.$downloadButton = $('<a class="button" href="#">' + this.content.download + '</a>');
+        this.$downloadButton = $('<a class="btn btn-primary" href="#">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
 
         var that = this;
