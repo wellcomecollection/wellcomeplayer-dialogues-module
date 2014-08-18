@@ -4,6 +4,8 @@ import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../coreplayer-shared-module/dialogue");
 import provider = require("../../extensions/wellcomeplayer-seadragon-extension/provider");
+import IWellcomeSeadragonExtension = require("../../extensions/wellcomeplayer-seadragon-extension/iWellcomeSeadragonExtension");
+import IWellcomeSeadragonProvider = require("../../extensions/wellcomeplayer-seadragon-extension/iWellcomeSeadragonProvider");
 
 export class DownloadDialogue extends dialogue.Dialogue {
 
@@ -86,19 +88,19 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
             switch (id){
                 case 'currentViewAsJpg':
-                    window.open((<extension.Extension>that.extension).getCropUri(false));
+                    window.open((<IWellcomeSeadragonExtension>that.extension).getCropUri(false));
                     $.publish(DownloadDialogue.PREVIEW, ['currentViewAsJpg']);
                 break;
                 case 'wholeImageHighResAsJpg':
-                    window.open((<provider.Provider>that.provider).getImage(asset, true));
+                    window.open((<IWellcomeSeadragonProvider>that.provider).getImage(asset, true, false));
                     $.publish(DownloadDialogue.PREVIEW, ['wholeImageHighResAsJpg']);
                 break;
                 case 'wholeImageLowResAsJpg':
-                    window.open((<provider.Provider>that.provider).getImage(asset, false));
+                    window.open((<IWellcomeSeadragonProvider>that.provider).getImage(asset, false, false));
                     $.publish(DownloadDialogue.PREVIEW, ['wholeImageLowResAsJpg']);
                 break;
                 case 'entireDocumentAsPdf':
-                    window.open((<provider.Provider>that.provider).getPDF());
+                    window.open((<IWellcomeSeadragonProvider>that.provider).getPDF(false));
                     $.publish(DownloadDialogue.PREVIEW, ['entireDocumentAsPdf']);
                 break;
             }
@@ -114,20 +116,20 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
             switch (id){
                 case 'currentViewAsJpg':
-                    var viewer = (<extension.Extension>that.extension).getViewer();
+                    var viewer = (<IWellcomeSeadragonExtension>that.extension).getViewer();
                     window.open((<provider.Provider>that.provider).getCrop(asset, viewer, true));
                     $.publish(DownloadDialogue.DOWNLOAD, ['currentViewAsJpg']);
                 break;
                 case 'wholeImageHighResAsJpg':
-                    window.open((<provider.Provider>that.provider).getImage(asset, true, true));
+                    window.open((<IWellcomeSeadragonProvider>that.provider).getImage(asset, true, true));
                     $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageHighResAsJpg']);
                 break;
                 case 'wholeImageLowResAsJpg':
-                    window.open((<provider.Provider>that.provider).getImage(asset, false, true));
+                    window.open((<IWellcomeSeadragonProvider>that.provider).getImage(asset, false, true));
                     $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageLowResAsJpg']);
                 break;
                 case 'entireDocumentAsPdf':
-                    window.open((<provider.Provider>that.provider).getPDF(true));
+                    window.open((<IWellcomeSeadragonProvider>that.provider).getPDF(true));
                     $.publish(DownloadDialogue.DOWNLOAD, ['entireDocumentAsPdf']);
                 break;
             }
