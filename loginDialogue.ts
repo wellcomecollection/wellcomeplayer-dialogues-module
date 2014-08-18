@@ -137,7 +137,7 @@ export class LoginDialogue extends dialogue.Dialogue {
                 <a class="nextItem" href="#"></a>\
                 <div class="guestLogin">\
                     <a class="viewTerms" href="#"></a>\
-                    <a class="acceptTerms button" href="#" target="_parent"></a>\
+                    <a class="acceptTerms btn btn-primary" href="#" target="_parent"></a>\
                 </div>\
                 <div class="libraryLogin">\
                     <a class="library" href="/handlers/auth/CasSSO.ashx"></a>\
