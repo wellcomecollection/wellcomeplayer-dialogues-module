@@ -209,7 +209,7 @@ export class LoginDialogue extends dialogue.Dialogue {
             this.$message.addClass('loading');
             this.$message.load(this.options.termsUri, () => {
                 this.$message.removeClass('loading');
-                this.$message.find('a').prop('target', '_blank');
+                this.$message.targetBlank();
                 this.$viewTermsButton.hide();
             });
 
